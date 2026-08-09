@@ -1,0 +1,72 @@
+@import "tailwindcss";
+
+/*
+ * Genix Academy design tokens
+ * Colors sampled from app/img/logo.png (orange / blue / charcoal identity).
+ * Layout rhythm (rounded-2xl cards, pill buttons, soft shadows) mirrors the
+ * reference template but every color below is Genix's own brand, not the
+ * template's green/navy.
+ */
+:root {
+  --background: #ffffff;
+  --foreground: #14141a;
+
+  /* Brand */
+  --color-genix-orange: #f47920;
+  --color-genix-orange-dark: #d9660f;
+  --color-genix-blue: #1b4fd1;
+  --color-genix-blue-dark: #163f9f;
+  --color-genix-charcoal: #3f3f46;
+  --color-genix-ink: #14141a;
+  --color-genix-ink-soft: #1f1f27;
+  --color-genix-mist: #f6f7fb;
+  --color-genix-mist-dark: #eef0f8;
+  --color-genix-line: #e6e7ef;
+  --color-genix-success: #16a34a;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  --color-genix-orange: var(--color-genix-orange);
+  --color-genix-orange-dark: var(--color-genix-orange-dark);
+  --color-genix-blue: var(--color-genix-blue);
+  --color-genix-blue-dark: var(--color-genix-blue-dark);
+  --color-genix-charcoal: var(--color-genix-charcoal);
+  --color-genix-ink: var(--color-genix-ink);
+  --color-genix-ink-soft: var(--color-genix-ink-soft);
+  --color-genix-mist: var(--color-genix-mist);
+  --color-genix-mist-dark: var(--color-genix-mist-dark);
+  --color-genix-line: var(--color-genix-line);
+  --color-genix-success: var(--color-genix-success);
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+
+  --shadow-soft: 0 8px 30px -12px rgba(20, 20, 26, 0.18);
+  --shadow-card: 0 4px 24px -8px rgba(20, 20, 26, 0.12);
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+}
+
+/* Utility: hide scrollbar for horizontally-scrollable rows (tab switcher, mobile carousels) */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Utility: gradient text for headline highlights */
+.text-gradient-brand {
+  background: linear-gradient(90deg, var(--color-genix-orange), var(--color-genix-blue));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
