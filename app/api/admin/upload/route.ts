@@ -31,22 +31,27 @@ export async function POST(req: Request) {
   const cloudinaryConfigured = !!(CLOUDINARY_CLOUD_NAME && CLOUDINARY_API_KEY && CLOUDINARY_API_SECRET);
 
   if (cloudinaryConfigured) {
-    const { v2: cloudinary } = await import("cloudinary");
-    cloudinary.config({
-      cloud_name: CLOUDINARY_CLOUD_NAME,
-      api_key: CLOUDINARY_API_KEY,
-      api_secret: CLOUDINARY_API_SECRET,
-    });
+    try {
+      const { v2: cloudinary } = await import("cloudinary");
+      cloudinary.config({
+        cloud_name: CLOUDINARY_CLOUD_NAME,
+        api_key: CLOUDINARY_API_KEY,
+        api_secret: CLOUDINARY_API_SECRET,
+      });
 
-    const bytes = await file.arrayBuffer();
-    const dataUri = `data:${file.type};base64,${Buffer.from(bytes).toString("base64")}`;
+      const bytes = await file.arrayBuffer();
+      const dataUri = `data:${file.type};base64,${Buffer.from(bytes).toString("base64")}`;
 
-    const result = await cloudinary.uploader.upload(dataUri, {
-      folder: "genixacademy",
-      resource_type: "image",
-    });
+      const result = await cloudinary.uploader.upload(dataUri, {
+        folder: "genixacademy",
+        resource_type: "image",
+      });
 
-    return NextResponse.json({ url: result.secure_url });
+      return NextResponse.json({ url: result.secure_url });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Cloudinary upload failed.";
+      return NextResponse.json({ error: `Cloudinary error: ${message}` }, { status: 500 });
+    }
   }
 
   // Local fallback — development only

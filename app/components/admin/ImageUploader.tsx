@@ -21,8 +21,11 @@ export default function ImageUploader({ value, onChange, label = "Image" }: Prop
       const form = new FormData();
       form.append("file", file);
       const res = await fetch("/api/admin/upload", { method: "POST", body: form });
-      const data = await res.json();
+      const text = await res.text();
+      let data: { url?: string; error?: string } = {};
+      try { data = JSON.parse(text); } catch { throw new Error(`Upload failed (${res.status}).`); }
       if (!res.ok) throw new Error(data.error ?? "Upload failed.");
+      if (!data.url) throw new Error("Upload succeeded but no URL returned.");
       onChange(data.url);
     } catch (e) {
       setError(e instanceof Error ? e.message : "Upload failed.");
