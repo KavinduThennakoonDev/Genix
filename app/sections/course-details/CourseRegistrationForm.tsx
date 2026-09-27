@@ -8,7 +8,7 @@ import Button from "@/app/components/Button";
 import RevealOnScroll from "@/app/components/RevealOnScroll";
 import { CheckCircleIcon } from "@/app/components/icons";
 import { TextField, SelectField, TextAreaField, CheckboxField } from "@/app/components/form/fields";
-import { courses, type Course } from "@/app/data/courses";
+import type { Course } from "@/app/data/courses";
 
 const EXPERIENCE_LEVELS = ["Fresher / Student", "0–1 Years", "1–3 Years", "3–5 Years", "5+ Years"];
 const QUALIFICATIONS = ["High School", "Diploma", "Bachelor's Degree", "Master's Degree", "Other"];
@@ -16,8 +16,13 @@ const BATCHES = ["Weekday Batch", "Weekend Batch", "Flexible / Either"];
 const LEARNING_MODES = ["Online", "Hybrid"];
 const REFERRAL_SOURCES = ["Facebook", "Instagram", "TikTok", "YouTube", "LinkedIn", "Google Search", "Friend / Referral", "Other"];
 
+interface Props {
+  course: Course;
+  courseList: { slug: string; title: string }[];
+}
+
 /** Course Registration Form — posts to /api/course-registration. */
-export default function CourseRegistrationForm({ course }: { course: Course }) {
+export default function CourseRegistrationForm({ course, courseList }: Props) {
   const [status, setStatus] = useState<"idle" | "submitting" | "success" | "error">("idle");
   const [consent, setConsent] = useState(false);
 
@@ -105,7 +110,7 @@ export default function CourseRegistrationForm({ course }: { course: Course }) {
             </SelectField>
 
             <SelectField label="Interested Course" name="interestedCourse" required defaultValue={course.slug}>
-              {courses.map((c) => (
+              {courseList.map((c) => (
                 <option key={c.slug} value={c.slug}>
                   {c.title}
                 </option>

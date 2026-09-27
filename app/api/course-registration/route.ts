@@ -1,13 +1,7 @@
 import { NextResponse } from "next/server";
+import { connectDB } from "@/app/lib/db";
+import Registration from "@/app/lib/models/Registration";
 
-/**
- * Course registration submission handler.
- *
- * Currently validates the payload and logs it server-side, returning a success response —
- * self-contained with no external dependency. To go live, replace the `// TODO` block below
- * with a real integration (e.g. send via Resend/SendGrid, write to a database or Google Sheet,
- * or forward to a CRM webhook).
- */
 export async function POST(request: Request) {
   let body: Record<string, unknown>;
   try {
@@ -33,10 +27,7 @@ export async function POST(request: Request) {
 
   const missing = requiredFields.filter((field) => !body[field]);
   if (missing.length > 0) {
-    return NextResponse.json(
-      { error: `Missing required fields: ${missing.join(", ")}` },
-      { status: 400 }
-    );
+    return NextResponse.json({ error: `Missing required fields: ${missing.join(", ")}` }, { status: 400 });
   }
 
   const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -44,8 +35,8 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "Please provide a valid email address." }, { status: 400 });
   }
 
-  // TODO: replace with a real integration — email notification, database write, or CRM webhook.
-  console.log("[course-registration] New submission:", body);
+  await connectDB();
+  await Registration.create({ ...body, type: "course", consent: body.consent === true || body.consent === "on" || body.consent === "true" });
 
   return NextResponse.json({ success: true });
 }

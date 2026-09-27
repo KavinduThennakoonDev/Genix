@@ -5,11 +5,12 @@ import TestimonialCard from "@/app/components/TestimonialCard";
 import Button from "@/app/components/Button";
 import RevealOnScroll from "@/app/components/RevealOnScroll";
 import { CheckIcon } from "@/app/components/icons";
-import { testimonials } from "@/app/data/testimonials";
+import { getTestimonials } from "@/app/lib/queries";
 import type { Course } from "@/app/data/courses";
 
 /** Testimonials + Pricing (original/discounted/early-bird/promo/payment options). */
-export default function TestimonialsAndPricing({ course }: { course: Course }) {
+export default async function TestimonialsAndPricing({ course }: { course: Course }) {
+  const testimonials = await getTestimonials("course");
   const discountPct = Math.round(
     ((course.pricing.originalPrice - course.pricing.discountedPrice) / course.pricing.originalPrice) * 100
   );

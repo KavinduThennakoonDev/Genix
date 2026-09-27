@@ -4,21 +4,20 @@ import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import logo from "@/app/img/logo.png";
-import { webinars } from "@/app/data/webinars";
 import Button from "./Button";
 import Container from "./Container";
 import { MenuIcon, XIcon } from "./icons";
 
-const NAV_LINKS = [
-  { label: "Home", href: "/" },
-  { label: "Courses", href: "/courses" },
-  { label: "Webinar", href: `/webinar/${webinars[0].slug}` },
-  { label: "Contact", href: "/#contact" },
-];
-
 /** Sticky floating pill nav, mirrors the template's rounded top nav bar. */
-export default function Header() {
+export default function Header({ webinarSlug = "aws-devops-career-webinar" }: { webinarSlug?: string }) {
   const [open, setOpen] = useState(false);
+
+  const NAV_LINKS = [
+    { label: "Home", href: "/" },
+    { label: "Courses", href: "/courses" },
+    { label: "Webinar", href: `/webinar/${webinarSlug}` },
+    { label: "Contact", href: "/#contact" },
+  ];
 
   return (
     <header className="sticky top-0 z-50 bg-white/85 backdrop-blur-md">

@@ -4,10 +4,11 @@ import SectionHeading from "@/app/components/SectionHeading";
 import Button from "@/app/components/Button";
 import CourseCard from "@/app/components/CourseCard";
 import RevealOnScroll from "@/app/components/RevealOnScroll";
-import { courses } from "@/app/data/courses";
+import { getCourses } from "@/app/lib/queries";
 
 /** Featured Courses grid on Home. */
-export default function FeaturedCourses() {
+export default async function FeaturedCourses() {
+  const courses = await getCourses();
   return (
     <Section tone="light">
       <Container>

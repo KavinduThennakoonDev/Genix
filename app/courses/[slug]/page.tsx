@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { courses, getCourseBySlug } from "@/app/data/courses";
+import { getCourseBySlug, getCourses } from "@/app/lib/queries";
 import CourseHero from "@/app/sections/course-details/CourseHero";
 import CourseIntroAndResults from "@/app/sections/course-details/CourseIntroAndResults";
 import PlacementAndBento from "@/app/sections/course-details/PlacementAndBento";
@@ -12,24 +12,18 @@ import ComparisonAndContact from "@/app/sections/course-details/ComparisonAndCon
 import CourseFaqSection from "@/app/sections/course-details/CourseFaqSection";
 import CourseRegistrationForm from "@/app/sections/course-details/CourseRegistrationForm";
 
-export function generateStaticParams() {
-  return courses.map((c) => ({ slug: c.slug }));
-}
+export const dynamic = "force-dynamic";
 
 export async function generateMetadata(props: PageProps<"/courses/[slug]">): Promise<Metadata> {
   const { slug } = await props.params;
-  const course = getCourseBySlug(slug);
+  const course = await getCourseBySlug(slug);
   if (!course) return {};
-
-  return {
-    title: course.title,
-    description: course.heroDescription,
-  };
+  return { title: course.title, description: course.heroDescription };
 }
 
 export default async function CourseDetailsPage(props: PageProps<"/courses/[slug]">) {
   const { slug } = await props.params;
-  const course = getCourseBySlug(slug);
+  const [course, allCourses] = await Promise.all([getCourseBySlug(slug), getCourses()]);
 
   if (!course) notFound();
 
@@ -44,7 +38,7 @@ export default async function CourseDetailsPage(props: PageProps<"/courses/[slug
       <TestimonialsAndPricing course={course} />
       <ComparisonAndContact />
       <CourseFaqSection />
-      <CourseRegistrationForm course={course} />
+      <CourseRegistrationForm course={course} courseList={allCourses.map((c) => ({ slug: c.slug, title: c.title }))} />
     </>
   );
 }

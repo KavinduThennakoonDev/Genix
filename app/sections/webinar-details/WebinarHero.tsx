@@ -11,14 +11,16 @@ import type { Webinar } from "@/app/data/webinars";
 export default function WebinarHero({ webinar }: { webinar: Webinar }) {
   return (
     <section className={`relative overflow-hidden bg-linear-to-br ${webinar.gradient} pt-14 pb-16 text-white sm:pt-20 sm:pb-20`}>
-      <Image
-        src={webinar.heroImage}
-        alt=""
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover opacity-30 mix-blend-luminosity"
-      />
+      {webinar.heroImage && (
+        <Image
+          src={webinar.heroImage}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover opacity-30 mix-blend-luminosity"
+        />
+      )}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_0%,rgba(255,255,255,0.16),transparent_55%)]" />
       <Container className="relative">
         <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-12">

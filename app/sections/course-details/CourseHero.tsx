@@ -11,14 +11,16 @@ import type { Course } from "@/app/data/courses";
 export default function CourseHero({ course }: { course: Course }) {
   return (
     <section className={`relative overflow-hidden bg-linear-to-br ${course.gradient} pt-14 pb-20 text-white sm:pt-20 sm:pb-28`}>
-      <Image
-        src={course.heroImage}
-        alt=""
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover opacity-35 mix-blend-luminosity"
-      />
+      {course.heroImage && (
+        <Image
+          src={course.heroImage}
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover opacity-35 mix-blend-luminosity"
+        />
+      )}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(255,255,255,0.18),transparent_55%)]" />
       <Container className="relative">
         <RevealOnScroll className="mx-auto flex max-w-3xl flex-col items-center gap-5 text-center">

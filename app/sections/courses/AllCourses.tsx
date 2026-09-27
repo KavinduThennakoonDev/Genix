@@ -3,10 +3,11 @@ import Section from "@/app/components/Section";
 import SectionHeading from "@/app/components/SectionHeading";
 import CourseCard from "@/app/components/CourseCard";
 import RevealOnScroll from "@/app/components/RevealOnScroll";
-import { courses } from "@/app/data/courses";
+import { getCourses } from "@/app/lib/queries";
 
 /** Full "All Courses" grid on the Courses listing page. */
-export default function AllCourses() {
+export default async function AllCourses() {
+  const courses = await getCourses();
   return (
     <Section tone="mist">
       <Container>

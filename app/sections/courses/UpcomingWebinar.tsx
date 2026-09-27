@@ -4,11 +4,13 @@ import Button from "@/app/components/Button";
 import Badge from "@/app/components/Badge";
 import RevealOnScroll from "@/app/components/RevealOnScroll";
 import { CalendarIcon, ClockIcon, UsersIcon } from "@/app/components/icons";
-import { webinars } from "@/app/data/webinars";
+import { getWebinars } from "@/app/lib/queries";
 
 /** Upcoming Webinar feature card. */
-export default function UpcomingWebinar() {
+export default async function UpcomingWebinar() {
+  const webinars = await getWebinars();
   const webinar = webinars[0];
+  if (!webinar) return null;
 
   return (
     <Section tone="light" className="pt-0!">

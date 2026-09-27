@@ -6,10 +6,11 @@ import TestimonialCard from "@/app/components/TestimonialCard";
 import RevealOnScroll from "@/app/components/RevealOnScroll";
 import { BadgeCheckIcon } from "@/app/components/icons";
 import { mentor } from "@/app/data/mentor";
-import { webinarTestimonials } from "@/app/data/testimonials";
+import { getTestimonials } from "@/app/lib/queries";
 
 /** Certification (participation benefits), Meet the Mentor, and attendee Testimonials. */
-export default function CertificationMentorTestimonials() {
+export default async function CertificationMentorTestimonials() {
+  const webinarTestimonials = await getTestimonials("webinar");
   return (
     <>
       <Section tone="mist">

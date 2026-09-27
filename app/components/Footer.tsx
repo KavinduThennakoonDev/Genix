@@ -2,16 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import logo from "@/app/img/logo.png";
 import Container from "./Container";
-import { webinars } from "@/app/data/webinars";
 import { FacebookIcon, InstagramIcon, LinkedinIcon, MailIcon, MapPinIcon, PhoneIcon, YoutubeIcon } from "./icons";
-
-const EXPLORE_LINKS = [
-  { label: "Home", href: "/" },
-  { label: "All Courses", href: "/courses" },
-  { label: "AWS DevOps Course", href: "/courses/aws-devops" },
-  { label: "Azure DevOps Course", href: "/courses/azure-devops" },
-  { label: "Free Webinar", href: `/webinar/${webinars[0].slug}` },
-];
 
 const COMPANY_LINKS = [
   { label: "Why Genix Academy", href: "/#why-genix" },
@@ -20,7 +11,15 @@ const COMPANY_LINKS = [
   { label: "Contact Us", href: "/#contact" },
 ];
 
-export default function Footer() {
+export default function Footer({ webinarSlug = "aws-devops-career-webinar" }: { webinarSlug?: string }) {
+  const EXPLORE_LINKS = [
+    { label: "Home", href: "/" },
+    { label: "All Courses", href: "/courses" },
+    { label: "AWS DevOps Course", href: "/courses/aws-devops" },
+    { label: "Azure DevOps Course", href: "/courses/azure-devops" },
+    { label: "Free Webinar", href: `/webinar/${webinarSlug}` },
+  ];
+
   return (
     <footer id="contact" className="bg-genix-ink text-white">
       <Container className="py-16">
@@ -93,12 +92,8 @@ export default function Footer() {
         <div className="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-6 text-xs text-white/50 sm:flex-row">
           <p>© {new Date().getFullYear()} Genix Academy. All rights reserved.</p>
           <div className="flex items-center gap-5">
-            <Link href="#" className="hover:text-white">
-              Privacy Policy
-            </Link>
-            <Link href="#" className="hover:text-white">
-              Terms of Service
-            </Link>
+            <Link href="#" className="hover:text-white">Privacy Policy</Link>
+            <Link href="#" className="hover:text-white">Terms of Service</Link>
           </div>
         </div>
       </Container>

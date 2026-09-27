@@ -4,10 +4,11 @@ import SectionHeading from "@/app/components/SectionHeading";
 import TestimonialCard from "@/app/components/TestimonialCard";
 import StarRating from "@/app/components/StarRating";
 import RevealOnScroll from "@/app/components/RevealOnScroll";
-import { testimonials } from "@/app/data/testimonials";
+import { getTestimonials } from "@/app/lib/queries";
 
 /** Student Success Stories — testimonial grid with ratings & placement highlights. */
-export default function SuccessStories() {
+export default async function SuccessStories() {
+  const testimonials = await getTestimonials("course");
   return (
     <Section tone="mist" id="success-stories">
       <Container>
