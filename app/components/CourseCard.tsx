@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowUpRightIcon, ClockIcon } from "./icons";
 import Badge from "./Badge";
@@ -11,8 +12,20 @@ export default function CourseCard({ course }: { course: Course }) {
       className="group flex h-full flex-col overflow-hidden rounded-2xl border border-genix-line bg-white shadow-card transition-all hover:-translate-y-1 hover:shadow-soft"
     >
       <div
-        className={`relative flex h-40 items-end p-5 bg-linear-to-br ${course.gradient}`}
+        className={`relative flex h-40 items-end overflow-hidden p-5 ${course.heroImage ? "bg-genix-ink" : `bg-linear-to-br ${course.gradient || "from-genix-ink to-genix-blue-dark"}`}`}
       >
+        {course.heroImage && (
+          <>
+            <Image
+              src={course.heroImage}
+              alt=""
+              fill
+              sizes="(min-width: 640px) 50vw, 100vw"
+              className="object-cover transition-transform duration-500 group-hover:scale-105"
+            />
+            <div className="absolute inset-0 bg-linear-to-t from-genix-ink/70 via-transparent to-transparent" />
+          </>
+        )}
         <Badge tone="white">{course.category}</Badge>
         {course.status && (
           <span className="absolute right-4 top-4 rounded-full bg-white/90 px-3 py-1 text-[11px] font-bold text-genix-ink">

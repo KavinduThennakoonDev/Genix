@@ -4,7 +4,6 @@ import Testimonial from "@/app/lib/models/Testimonial";
 import Webinar from "@/app/lib/models/Webinar";
 import Registration from "@/app/lib/models/Registration";
 import Link from "next/link";
-import SeedButton from "@/app/components/admin/SeedButton";
 
 async function getStats() {
   try {
@@ -90,13 +89,6 @@ export default async function AdminDashboard() {
           </div>
         </div>
 
-        <div className="bg-gray-900 border border-gray-800 rounded-2xl p-5">
-          <h2 className="text-base font-semibold text-white mb-3">Seed Database</h2>
-          <p className="text-sm text-gray-400 mb-4">
-            Populate MongoDB with the static course, webinar, and testimonial data from the codebase.
-          </p>
-          <SeedButton />
-        </div>
       </div>
 
       {/* Recent registrations */}

@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Container from "@/app/components/Container";
 import Badge from "@/app/components/Badge";
 import AvatarStack from "@/app/components/AvatarStack";
@@ -6,21 +5,12 @@ import VideoCard from "@/app/components/VideoCard";
 import RevealOnScroll from "@/app/components/RevealOnScroll";
 import { CalendarIcon, ClockIcon, UsersIcon } from "@/app/components/icons";
 import type { Webinar } from "@/app/data/webinars";
+import { formatDisplayDate, formatDisplayTime } from "@/app/lib/format";
 
 /** Webinar Details hero — background photo + brand-gradient scrim, date/time/duration, speaker, intro video, avatars. */
 export default function WebinarHero({ webinar }: { webinar: Webinar }) {
   return (
     <section className={`relative overflow-hidden bg-linear-to-br ${webinar.gradient} pt-14 pb-16 text-white sm:pt-20 sm:pb-20`}>
-      {webinar.heroImage && (
-        <Image
-          src={webinar.heroImage}
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          className="object-cover opacity-30 mix-blend-luminosity"
-        />
-      )}
       <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_80%_0%,rgba(255,255,255,0.16),transparent_55%)]" />
       <Container className="relative">
         <div className="grid items-center gap-10 lg:grid-cols-[1.1fr_0.9fr] lg:gap-12">
@@ -33,10 +23,10 @@ export default function WebinarHero({ webinar }: { webinar: Webinar }) {
 
             <div className="mt-6 flex flex-wrap gap-3 text-sm font-semibold">
               <span className="flex items-center gap-1.5 rounded-full bg-white/10 px-4 py-2">
-                <CalendarIcon className="h-4 w-4" /> {webinar.date}
+                <CalendarIcon className="h-4 w-4" /> {formatDisplayDate(webinar.date)}
               </span>
               <span className="flex items-center gap-1.5 rounded-full bg-white/10 px-4 py-2">
-                <ClockIcon className="h-4 w-4" /> {webinar.time}
+                <ClockIcon className="h-4 w-4" /> {formatDisplayTime(webinar.time)}
               </span>
               <span className="flex items-center gap-1.5 rounded-full bg-white/10 px-4 py-2">
                 <UsersIcon className="h-4 w-4" /> {webinar.registeredCount}

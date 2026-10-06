@@ -2,7 +2,6 @@ import Container from "@/app/components/Container";
 import Section from "@/app/components/Section";
 import SectionHeading from "@/app/components/SectionHeading";
 import BentoCell from "@/app/components/BentoCell";
-import LogoGrid from "@/app/components/LogoGrid";
 import RevealOnScroll from "@/app/components/RevealOnScroll";
 import {
   BriefcaseIcon,
@@ -14,28 +13,10 @@ import {
 } from "@/app/components/icons";
 import type { Course } from "@/app/data/courses";
 
-/** Placement Companies logos + Bento Grid (time commitment, outcomes, career opportunities, salary, etc.). */
+/** Course at a Glance bento grid (time commitment, outcomes, career opportunities, salary, etc.). */
 export default function PlacementAndBento({ course }: { course: Course }) {
-  const companyLogos = course.placementCompanyNames.map((name) => ({ name }));
-
   return (
     <>
-      <Section tone="mist">
-        <Container>
-          <RevealOnScroll>
-            <SectionHeading
-              align="center"
-              eyebrow="Placement Companies"
-              title="Where Our Graduates"
-              highlight="Get Hired"
-            />
-          </RevealOnScroll>
-          <RevealOnScroll delay={0.1} className="mt-10">
-            <LogoGrid logos={companyLogos} />
-          </RevealOnScroll>
-        </Container>
-      </Section>
-
       <Section tone="light">
         <Container>
           <RevealOnScroll>

@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import ImageUploader from "@/app/components/admin/ImageUploader";
 import { useRouter } from "next/navigation";
+import { WEBINAR_DURATION_OPTIONS, withCurrentOption } from "@/app/lib/options";
 
 interface Webinar {
   _id: string;
@@ -166,16 +167,20 @@ export default function WebinarsPage() {
 
               <div className="grid grid-cols-2 gap-4">
                 <Field label="Date">
-                  <input className={inp} value={form.date} onChange={(e) => setField("date", e.target.value)} placeholder="August 16, 2026" />
+                  <input type="date" className={inp} value={form.date} onChange={(e) => setField("date", e.target.value)} />
                 </Field>
                 <Field label="Time">
-                  <input className={inp} value={form.time} onChange={(e) => setField("time", e.target.value)} placeholder="7:00 PM (GMT+5:30)" />
+                  <input type="time" className={inp} value={form.time} onChange={(e) => setField("time", e.target.value)} />
                 </Field>
               </div>
 
               <div className="grid grid-cols-2 gap-4">
                 <Field label="Duration">
-                  <input className={inp} value={form.duration} onChange={(e) => setField("duration", e.target.value)} placeholder="60 Minutes" />
+                  <select className={inp} value={form.duration} onChange={(e) => setField("duration", e.target.value)}>
+                    {withCurrentOption(WEBINAR_DURATION_OPTIONS, form.duration).map((o) => (
+                      <option key={o} value={o}>{o}</option>
+                    ))}
+                  </select>
                 </Field>
                 <Field label="Registered Count">
                   <input className={inp} value={form.registeredCount} onChange={(e) => setField("registeredCount", e.target.value)} placeholder="180+ Registered" />

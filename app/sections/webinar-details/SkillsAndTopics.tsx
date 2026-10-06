@@ -52,7 +52,7 @@ export default function SkillsAndTopics({ webinar }: { webinar: Webinar }) {
         <RevealOnScroll delay={0.1}>
           <div className="mt-12 flex flex-col items-center gap-4 rounded-3xl border border-dashed border-genix-orange/40 bg-genix-mist p-8 text-center sm:flex-row sm:justify-between sm:text-left">
             <div>
-              <h3 className="text-lg font-bold text-genix-ink">Want the AWS DevOps Course Curriculum?</h3>
+              <h3 className="text-lg font-bold text-genix-ink">Want the Full Course Curriculum?</h3>
               <p className="mt-1 text-sm text-genix-charcoal/75">
                 Get the full module-by-module breakdown of the course this webinar leads into.
               </p>

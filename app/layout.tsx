@@ -41,7 +41,7 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
-  const webinarSlug = await getFirstWebinarSlug().catch(() => null) ?? "aws-devops-career-webinar";
+  const webinarSlug = (await getFirstWebinarSlug().catch(() => null)) ?? undefined;
 
   return (
     <html

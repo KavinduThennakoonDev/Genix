@@ -9,6 +9,7 @@ import { getCourses } from "@/app/lib/queries";
 /** Featured Courses grid on Home. */
 export default async function FeaturedCourses() {
   const courses = await getCourses();
+  if (courses.length === 0) return null;
   return (
     <Section tone="light">
       <Container>

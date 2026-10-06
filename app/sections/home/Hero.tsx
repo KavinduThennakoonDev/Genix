@@ -1,10 +1,9 @@
 import Container from "@/app/components/Container";
-import Badge from "@/app/components/Badge";
 import Button from "@/app/components/Button";
-import AvatarStack from "@/app/components/AvatarStack";
-import VideoCard from "@/app/components/VideoCard";
+import LogoSceneLoader from "@/app/components/three/LogoSceneLoader";
 import RevealOnScroll from "@/app/components/RevealOnScroll";
-import { CheckCircleIcon, TrendingUpIcon } from "@/app/components/icons";
+import { CheckCircleIcon } from "@/app/components/icons";
+import { BOOK_CALL_MESSAGE, whatsappUrl } from "@/app/data/contact";
 
 const VALUE_PROPS = ["Live, mentor-led classes", "Real AWS & Azure projects", "Dedicated placement support"];
 
@@ -15,9 +14,6 @@ export default function Hero() {
       <Container>
         <div className="grid items-center gap-12 lg:grid-cols-2 lg:gap-8">
           <RevealOnScroll direction="left">
-            <Badge tone="orange" icon={<TrendingUpIcon className="h-3.5 w-3.5" />}>
-              Live Cohorts Open — AWS DevOps Batch Enrolling Now
-            </Badge>
             <h1 className="mt-5 text-4xl font-extrabold leading-[1.08] tracking-tight text-genix-ink sm:text-5xl lg:text-[3.4rem]">
               Launch Your Career as a{" "}
               <span className="text-gradient-brand">DevOps Engineer</span>
@@ -31,16 +27,9 @@ export default function Hero() {
               <Button href="/courses" size="lg" variant="primary">
                 Enroll Now
               </Button>
-              <Button href="/#contact" size="lg" variant="secondary" withArrow={false}>
+              <Button href={whatsappUrl(BOOK_CALL_MESSAGE)} target="_blank" size="lg" variant="secondary" withArrow={false}>
                 Book a Free Career Call
               </Button>
-            </div>
-            <div className="mt-10">
-              <AvatarStack
-                initials={["IP", "DF", "SW", "KJ"]}
-                count="1,200+"
-                label="Students Trained & Counting"
-              />
             </div>
           </RevealOnScroll>
 
@@ -58,25 +47,12 @@ export default function Hero() {
               </div>
 
               <div className="relative overflow-hidden rounded-4xl bg-genix-ink p-3 shadow-soft sm:pl-16">
-                <VideoCard
-                  title="A Real Genix Academy Success Story"
-                  subtitle="From IT Support to DevOps Engineer in 4 months"
-                  image="/images/scenes/home-hero.jpg"
-                  className="aspect-4/5 sm:aspect-9/11"
-                />
-              </div>
-
-              <div className="absolute -bottom-6 right-2 z-10 flex items-center gap-3 rounded-2xl border border-genix-line bg-white px-4 py-3 shadow-soft sm:right-6">
-                <div className="flex -space-x-2">
-                  {["★", "★", "★"].map((s, i) => (
-                    <span key={i} className="text-genix-orange">
-                      {s}
-                    </span>
-                  ))}
-                </div>
-                <div className="leading-tight">
-                  <p className="text-sm font-bold text-genix-ink">4.9 / 5</p>
-                  <p className="text-[11px] text-genix-charcoal/60">Average Student Rating</p>
+                <div className="relative aspect-4/5 overflow-hidden rounded-3xl sm:aspect-9/11">
+                  <LogoSceneLoader />
+                  <div className="pointer-events-none absolute inset-x-0 bottom-0 z-10 bg-linear-to-t from-genix-ink via-genix-ink/80 to-transparent p-6 pt-16 text-white">
+                    <p className="text-base font-bold">Launch Your DevOps Career</p>
+                    <p className="mt-1 text-sm text-white/70">AWS &amp; Azure · Live, mentor-led classes</p>
+                  </div>
                 </div>
               </div>
             </div>

@@ -54,4 +54,20 @@ export interface Course {
     careerValue: string;
   };
   pricing: Pricing;
+  /** ISO date string, or null when no deadline is set. */
+  enrollmentDeadline: string | null;
+  /** Mentors assigned in admin. Populated on the course page. */
+  mentors: MentorProfile[];
+}
+
+/** A mentor who runs a course, as stored in admin and shown on the course page. */
+export interface MentorProfile {
+  _id?: string;
+  name: string;
+  title: string;
+  photo: string;
+  experience: string;
+  bio: string;
+  credentials: string[];
+  linkedin: string;
 }

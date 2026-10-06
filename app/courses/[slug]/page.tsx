@@ -9,7 +9,6 @@ import CurriculumSection from "@/app/sections/course-details/CurriculumSection";
 import CertificationAndMentor from "@/app/sections/course-details/CertificationAndMentor";
 import TestimonialsAndPricing from "@/app/sections/course-details/TestimonialsAndPricing";
 import ComparisonAndContact from "@/app/sections/course-details/ComparisonAndContact";
-import CourseFaqSection from "@/app/sections/course-details/CourseFaqSection";
 import CourseRegistrationForm from "@/app/sections/course-details/CourseRegistrationForm";
 
 export const dynamic = "force-dynamic";
@@ -37,7 +36,6 @@ export default async function CourseDetailsPage(props: PageProps<"/courses/[slug
       <CertificationAndMentor course={course} />
       <TestimonialsAndPricing course={course} />
       <ComparisonAndContact />
-      <CourseFaqSection />
       <CourseRegistrationForm course={course} courseList={allCourses.map((c) => ({ slug: c.slug, title: c.title }))} />
     </>
   );

@@ -4,6 +4,7 @@ import SectionHeading from "@/app/components/SectionHeading";
 import ComparisonTable from "@/app/components/ComparisonTable";
 import Button from "@/app/components/Button";
 import RevealOnScroll from "@/app/components/RevealOnScroll";
+import { BOOK_CALL_MESSAGE, whatsappUrl } from "@/app/data/contact";
 import { MailIcon, PhoneIcon } from "@/app/components/icons";
 
 const ROWS = [
@@ -43,8 +44,8 @@ export default function ComparisonAndContact() {
               <Button href="mailto:hello@genixacademy.com" variant="primary" withArrow={false} className="gap-2">
                 <MailIcon className="h-4 w-4" /> Email Us
               </Button>
-              <Button href="tel:+94700000000" variant="secondary" withArrow={false} className="gap-2 border-white/30! bg-transparent! text-white hover:border-white/60!">
-                <PhoneIcon className="h-4 w-4" /> Call Us
+              <Button href={whatsappUrl(BOOK_CALL_MESSAGE)} target="_blank"variant="secondary" withArrow={false} className="gap-2 border-white/30! bg-transparent! text-white hover:border-white/60!">
+                <PhoneIcon className="h-4 w-4" /> WhatsApp Us
               </Button>
             </div>
           </RevealOnScroll>

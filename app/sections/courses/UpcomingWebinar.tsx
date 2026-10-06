@@ -5,6 +5,7 @@ import Badge from "@/app/components/Badge";
 import RevealOnScroll from "@/app/components/RevealOnScroll";
 import { CalendarIcon, ClockIcon, UsersIcon } from "@/app/components/icons";
 import { getWebinars } from "@/app/lib/queries";
+import { formatDisplayDate, formatDisplayTime } from "@/app/lib/format";
 
 /** Upcoming Webinar feature card. */
 export default async function UpcomingWebinar() {
@@ -24,10 +25,10 @@ export default async function UpcomingWebinar() {
               <h2 className="text-2xl font-bold leading-tight sm:text-3xl">{webinar.title}</h2>
               <div className="flex flex-wrap gap-4 text-sm text-white/85">
                 <span className="flex items-center gap-1.5">
-                  <CalendarIcon className="h-4 w-4" /> {webinar.date}
+                  <CalendarIcon className="h-4 w-4" /> {formatDisplayDate(webinar.date)}
                 </span>
                 <span className="flex items-center gap-1.5">
-                  <ClockIcon className="h-4 w-4" /> {webinar.time}
+                  <ClockIcon className="h-4 w-4" /> {formatDisplayTime(webinar.time)}
                 </span>
                 <span className="flex items-center gap-1.5">
                   <UsersIcon className="h-4 w-4" /> {webinar.registeredCount}

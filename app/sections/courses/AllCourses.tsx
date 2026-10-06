@@ -8,6 +8,7 @@ import { getCourses } from "@/app/lib/queries";
 /** Full "All Courses" grid on the Courses listing page. */
 export default async function AllCourses() {
   const courses = await getCourses();
+  if (courses.length === 0) return null;
   return (
     <Section tone="mist">
       <Container>

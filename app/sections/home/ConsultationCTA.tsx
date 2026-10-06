@@ -3,6 +3,7 @@ import Section from "@/app/components/Section";
 import Button from "@/app/components/Button";
 import RevealOnScroll from "@/app/components/RevealOnScroll";
 import { CalendarIcon } from "@/app/components/icons";
+import { BOOK_CALL_MESSAGE, whatsappUrl } from "@/app/data/contact";
 
 /** "Book a Career Consultation" CTA card. */
 export default function ConsultationCTA() {
@@ -11,8 +12,7 @@ export default function ConsultationCTA() {
       <Container>
         <RevealOnScroll>
           <div className="relative overflow-hidden rounded-3xl bg-genix-ink px-6 py-12 text-white sm:px-12 sm:py-14">
-            <div className="pointer-events-none absolute -right-16 -top-16 h-64 w-64 rounded-full bg-genix-orange/20 blur-3xl" />
-            <div className="pointer-events-none absolute -bottom-20 -left-10 h-64 w-64 rounded-full bg-genix-blue/20 blur-3xl" />
+            <div className="pointer-events-none absolute inset-y-0 right-0 w-1.5 bg-genix-orange" />
             <div className="relative flex flex-col items-center gap-6 text-center sm:flex-row sm:justify-between sm:text-left">
               <div className="flex items-start gap-4">
                 <span className="hidden h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/10 sm:flex">
@@ -27,7 +27,7 @@ export default function ConsultationCTA() {
                   </p>
                 </div>
               </div>
-              <Button href="/#contact" variant="primary" size="lg" className="shrink-0">
+              <Button href={whatsappUrl(BOOK_CALL_MESSAGE)} target="_blank" variant="primary" size="lg" className="shrink-0">
                 Book Free Consultation
               </Button>
             </div>

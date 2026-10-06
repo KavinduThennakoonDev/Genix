@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import logo from "@/app/img/logo.png";
+import { WHATSAPP_DISPLAY } from "@/app/data/contact";
 import Container from "./Container";
 import { FacebookIcon, InstagramIcon, LinkedinIcon, MailIcon, MapPinIcon, PhoneIcon, YoutubeIcon } from "./icons";
 
@@ -11,13 +12,11 @@ const COMPANY_LINKS = [
   { label: "Contact Us", href: "/#contact" },
 ];
 
-export default function Footer({ webinarSlug = "aws-devops-career-webinar" }: { webinarSlug?: string }) {
+export default function Footer({ webinarSlug }: { webinarSlug?: string | null }) {
   const EXPLORE_LINKS = [
     { label: "Home", href: "/" },
     { label: "All Courses", href: "/courses" },
-    { label: "AWS DevOps Course", href: "/courses/aws-devops" },
-    { label: "Azure DevOps Course", href: "/courses/azure-devops" },
-    { label: "Free Webinar", href: `/webinar/${webinarSlug}` },
+    ...(webinarSlug ? [{ label: "Free Webinar", href: `/webinar/${webinarSlug}` }] : []),
   ];
 
   return (
@@ -79,7 +78,7 @@ export default function Footer({ webinarSlug = "aws-devops-career-webinar" }: { 
               </li>
               <li className="flex items-start gap-2.5">
                 <PhoneIcon className="mt-0.5 h-4 w-4 shrink-0 text-genix-orange" />
-                +94 7X XXX XXXX
+                {WHATSAPP_DISPLAY}
               </li>
               <li className="flex items-start gap-2.5">
                 <MapPinIcon className="mt-0.5 h-4 w-4 shrink-0 text-genix-orange" />

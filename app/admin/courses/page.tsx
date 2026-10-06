@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import ImageUploader from "@/app/components/admin/ImageUploader";
+import { COURSE_DURATION_OPTIONS, COURSE_HOURS_OPTIONS, withCurrentOption } from "@/app/lib/options";
 import { useRouter } from "next/navigation";
 
 interface Course {
@@ -25,6 +26,8 @@ interface Course {
     promoCode: string;
     paymentOptions: string[];
   };
+  enrollmentDeadline: string | null;
+  mentors: string[];
   isPublished: boolean;
 }
 
@@ -40,12 +43,16 @@ const EMPTY: Omit<Course, "_id"> = {
   heroDescription: "",
   overview: "",
   pricing: { currency: "USD", originalPrice: 0, discountedPrice: 0, earlyBirdDeadline: "", promoCode: "", paymentOptions: [] },
+  enrollmentDeadline: "",
+  mentors: [],
   isPublished: true,
 };
 
 export default function CoursesPage() {
   const router = useRouter();
   const [courses, setCourses] = useState<Course[]>([]);
+  const [categories, setCategories] = useState<{ _id: string; name: string }[]>([]);
+  const [mentorOptions, setMentorOptions] = useState<{ _id: string; name: string }[]>([]);
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
 
@@ -64,7 +71,17 @@ export default function CoursesPage() {
     setLoading(false);
   }
 
-  useEffect(() => { fetchCourses(); }, []);
+  async function fetchCategories() {
+    const res = await fetch("/api/admin/categories");
+    if (res.ok) setCategories(await res.json());
+  }
+
+  async function fetchMentorOptions() {
+    const res = await fetch("/api/admin/mentors");
+    if (res.ok) setMentorOptions(await res.json());
+  }
+
+  useEffect(() => { fetchCourses(); fetchCategories(); fetchMentorOptions(); }, []);
 
   function openNew() {
     setEditing(null);
@@ -75,7 +92,7 @@ export default function CoursesPage() {
 
   function openEdit(c: Course) {
     setEditing(c);
-    setForm({ ...c });
+    setForm({ ...c, enrollmentDeadline: toLocalInput(c.enrollmentDeadline), mentors: c.mentors ?? [] });
     setError("");
     setShowForm(true);
   }
@@ -104,7 +121,10 @@ export default function CoursesPage() {
       const res = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({
+          ...form,
+          enrollmentDeadline: form.enrollmentDeadline ? new Date(form.enrollmentDeadline).toISOString() : null,
+        }),
       });
       const data = await res.json();
       if (!res.ok) { setError(data.error ?? "Save failed."); return; }
@@ -205,7 +225,12 @@ export default function CoursesPage() {
 
               <div className="grid grid-cols-2 gap-4">
                 <Field label="Category">
-                  <input className={inp} value={form.category} onChange={(e) => setField("category", e.target.value)} placeholder="AWS DevOps" />
+                  <select className={inp} value={form.category} onChange={(e) => setField("category", e.target.value)}>
+                    <option value="">{categories.length ? "Select a category" : "No categories yet, add one under Categories"}</option>
+                    {withCurrentOption(categories.map((c) => c.name), form.category).map((name) => (
+                      <option key={name} value={name}>{name}</option>
+                    ))}
+                  </select>
                 </Field>
                 <Field label="Status">
                   <select className={inp} value={form.status} onChange={(e) => setField("status", e.target.value)}>
@@ -218,10 +243,18 @@ export default function CoursesPage() {
 
               <div className="grid grid-cols-2 gap-4">
                 <Field label="Duration">
-                  <input className={inp} value={form.duration} onChange={(e) => setField("duration", e.target.value)} placeholder="12 Weeks" />
+                  <select className={inp} value={form.duration} onChange={(e) => setField("duration", e.target.value)}>
+                    {withCurrentOption(COURSE_DURATION_OPTIONS, form.duration).map((o) => (
+                      <option key={o} value={o}>{o}</option>
+                    ))}
+                  </select>
                 </Field>
                 <Field label="Total Hours">
-                  <input className={inp} value={form.totalHours} onChange={(e) => setField("totalHours", e.target.value)} placeholder="120+ Hours" />
+                  <select className={inp} value={form.totalHours} onChange={(e) => setField("totalHours", e.target.value)}>
+                    {withCurrentOption(COURSE_HOURS_OPTIONS, form.totalHours).map((o) => (
+                      <option key={o} value={o}>{o}</option>
+                    ))}
+                  </select>
                 </Field>
               </div>
 
@@ -231,6 +264,54 @@ export default function CoursesPage() {
 
               <Field label="Hero Description">
                 <textarea className={inp} rows={3} value={form.heroDescription} onChange={(e) => setField("heroDescription", e.target.value)} />
+              </Field>
+
+              <Field label="Mentors (who conducts this course)">
+                {(() => {
+                  const selected = form.mentors ?? [];
+                  const available = mentorOptions.filter((m) => !selected.includes(m._id));
+                  const byId = new Map(mentorOptions.map((m) => [m._id, m.name]));
+                  return (
+                    <div className="space-y-3">
+                      <div className="flex flex-wrap gap-2">
+                        {selected.length === 0 && <p className="text-xs text-gray-500">No mentors selected yet.</p>}
+                        {selected.map((id) => (
+                          <span key={id} className="inline-flex items-center gap-2 rounded-full bg-orange-500/15 px-3 py-1 text-sm text-orange-300">
+                            {byId.get(id) ?? "Removed mentor"}
+                            <button
+                              type="button"
+                              onClick={() => setField("mentors", selected.filter((x) => x !== id))}
+                              className="text-orange-300 hover:text-white"
+                              aria-label="Remove mentor"
+                            >
+                              ×
+                            </button>
+                          </span>
+                        ))}
+                      </div>
+                      <select
+                        className={inp}
+                        value=""
+                        disabled={mentorOptions.length === 0}
+                        onChange={(e) => {
+                          const id = e.target.value;
+                          if (id) setField("mentors", [...selected, id]);
+                        }}
+                      >
+                        <option value="">
+                          {mentorOptions.length === 0
+                            ? "No mentors yet, add them under Mentors first"
+                            : available.length === 0
+                              ? "All mentors are selected"
+                              : "Select a mentor to add…"}
+                        </option>
+                        {available.map((m) => (
+                          <option key={m._id} value={m._id}>{m.name}</option>
+                        ))}
+                      </select>
+                    </div>
+                  );
+                })()}
               </Field>
 
               <Field label="Overview">
@@ -251,9 +332,13 @@ export default function CoursesPage() {
                   <input className={inp} value={form.pricing.promoCode} onChange={(e) => setPricingField("promoCode", e.target.value)} />
                 </Field>
                 <Field label="Early Bird Deadline">
-                  <input className={inp} value={form.pricing.earlyBirdDeadline} onChange={(e) => setPricingField("earlyBirdDeadline", e.target.value)} placeholder="August 15, 2026" />
+                  <input type="date" className={inp} value={form.pricing.earlyBirdDeadline} onChange={(e) => setPricingField("earlyBirdDeadline", e.target.value)} />
                 </Field>
               </div>
+
+              <Field label="Enrollment Deadline (drives the home page countdown banner)">
+                <input type="datetime-local" className={inp} value={form.enrollmentDeadline ?? ""} onChange={(e) => setField("enrollmentDeadline", e.target.value)} />
+              </Field>
 
               <div className="flex items-center gap-3">
                 <input type="checkbox" id="published" checked={form.isPublished} onChange={(e) => setField("isPublished", e.target.checked)} className="w-4 h-4 accent-orange-500" />
@@ -304,6 +389,15 @@ function Field({ label, children, required }: { label: string; children: React.R
 }
 
 const inp = "w-full px-3 py-2 bg-gray-800 border border-gray-700 rounded-xl text-sm text-white placeholder-gray-500 focus:outline-none focus:border-orange-500 transition-colors";
+
+/** Converts an ISO date from the API into the value a datetime-local input expects (local time). */
+function toLocalInput(iso: string | null | undefined) {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (Number.isNaN(d.getTime())) return "";
+  const pad = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`;
+}
 
 function slugify(str: string) {
   return str.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");

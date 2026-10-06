@@ -1,5 +1,6 @@
 import { connectDB } from "./db";
 import Course from "./models/Course";
+import "./models/Mentor"; // registers the Mentor model for populate()
 import Testimonial from "./models/Testimonial";
 import Webinar from "./models/Webinar";
 import type { Course as CourseType } from "@/app/data/courses";
@@ -12,6 +13,8 @@ function serialize<T>(doc: unknown): T {
 }
 
 const COURSE_DEFAULTS = {
+  enrollmentDeadline: null,
+  mentors: [],
   bento: {
     timeCommitment: "",
     whatYoullLearn: [],
@@ -37,6 +40,7 @@ function normalizeCourse<T extends Record<string, unknown>>(doc: T): T {
     bento: (doc.bento && typeof doc.bento === "object" && !Array.isArray(doc.bento) && Object.keys(doc.bento as object).length > 0)
       ? { ...COURSE_DEFAULTS.bento, ...(doc.bento as object) }
       : COURSE_DEFAULTS.bento,
+    mentors: Array.isArray(doc.mentors) ? doc.mentors.filter(Boolean) : [],
     roadmap: Array.isArray(doc.roadmap) ? doc.roadmap : [],
     skills: Array.isArray(doc.skills) ? doc.skills : [],
     curriculum: Array.isArray(doc.curriculum) ? doc.curriculum : [],
@@ -80,9 +84,22 @@ export async function getCourses(): Promise<CourseType[]> {
   return serialize<Record<string, unknown>[]>(docs).map(normalizeCourse) as unknown as CourseType[];
 }
 
+/** Latest published course that is still open for enrollment (no deadline, or deadline not yet passed). */
+export async function getLatestOpenCourse(): Promise<CourseType | null> {
+  await connectDB();
+  const now = new Date();
+  const doc = await Course.findOne({
+    isPublished: true,
+    $or: [{ enrollmentDeadline: null }, { enrollmentDeadline: { $gt: now } }],
+  })
+    .sort({ createdAt: -1 })
+    .lean();
+  return doc ? normalizeCourse(serialize<Record<string, unknown>>(doc)) as unknown as CourseType : null;
+}
+
 export async function getCourseBySlug(slug: string): Promise<CourseType | null> {
   await connectDB();
-  const doc = await Course.findOne({ slug, isPublished: true }).lean();
+  const doc = await Course.findOne({ slug, isPublished: true }).populate("mentors").lean();
   return doc ? normalizeCourse(serialize<Record<string, unknown>>(doc)) as unknown as CourseType : null;
 }
 

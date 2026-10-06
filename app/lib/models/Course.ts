@@ -31,6 +31,8 @@ export interface ICourse extends Document {
     promoCode: string;
     paymentOptions: string[];
   };
+  enrollmentDeadline: Date | null;
+  mentors: mongoose.Types.ObjectId[];
   isPublished: boolean;
   createdAt: Date;
   updatedAt: Date;
@@ -68,12 +70,16 @@ const CourseSchema = new Schema<ICourse>(
       promoCode: { type: String, default: "" },
       paymentOptions: [{ type: String }],
     },
+    enrollmentDeadline: { type: Date, default: null },
+    mentors: [{ type: Schema.Types.ObjectId, ref: "Mentor" }],
     isPublished: { type: Boolean, default: true },
   },
   { timestamps: true }
 );
 
-const Course: Model<ICourse> =
-  mongoose.models.Course || mongoose.model<ICourse>("Course", CourseSchema);
+// Dev hot-reload keeps the previously compiled model, which silently drops fields added to the
+// schema later. Recompile it so schema changes (like enrollmentDeadline) are saved.
+if (mongoose.models.Course) mongoose.deleteModel("Course");
+const Course: Model<ICourse> = mongoose.model<ICourse>("Course", CourseSchema);
 
 export default Course;

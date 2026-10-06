@@ -7,36 +7,41 @@ import RevealOnScroll from "@/app/components/RevealOnScroll";
 import { CheckIcon } from "@/app/components/icons";
 import { getTestimonials } from "@/app/lib/queries";
 import type { Course } from "@/app/data/courses";
+import { formatDisplayDate } from "@/app/lib/format";
 
 /** Testimonials + Pricing (original/discounted/early-bird/promo/payment options). */
 export default async function TestimonialsAndPricing({ course }: { course: Course }) {
   const testimonials = await getTestimonials("course");
-  const discountPct = Math.round(
-    ((course.pricing.originalPrice - course.pricing.discountedPrice) / course.pricing.originalPrice) * 100
-  );
+  const hasPricing = course.pricing.originalPrice > 0 && course.pricing.discountedPrice > 0;
+  const discountPct = hasPricing
+    ? Math.round(((course.pricing.originalPrice - course.pricing.discountedPrice) / course.pricing.originalPrice) * 100)
+    : 0;
 
   return (
     <>
-      <Section tone="light">
-        <Container>
-          <RevealOnScroll>
-            <SectionHeading align="center" eyebrow="Testimonials" title="What Our Students" highlight="Say" />
-          </RevealOnScroll>
-          <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {testimonials.slice(0, 3).map((t, i) => (
-              <RevealOnScroll key={t.name} delay={i * 0.06}>
-                <TestimonialCard testimonial={t} />
-              </RevealOnScroll>
-            ))}
-          </div>
-        </Container>
-      </Section>
+      {testimonials.length > 0 && (
+        <Section tone="light">
+          <Container>
+            <RevealOnScroll>
+              <SectionHeading align="center" eyebrow="Testimonials" title="What Our Students" highlight="Say" />
+            </RevealOnScroll>
+            <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {testimonials.slice(0, 3).map((t, i) => (
+                <RevealOnScroll key={t.name} delay={i * 0.06}>
+                  <TestimonialCard testimonial={t} />
+                </RevealOnScroll>
+              ))}
+            </div>
+          </Container>
+        </Section>
+      )}
 
+      {hasPricing && (
       <Section tone="ink" id="pricing">
         <Container>
           <RevealOnScroll className="mx-auto max-w-xl overflow-hidden rounded-3xl border border-white/10 bg-white/5">
             <div className="bg-genix-orange px-6 py-3 text-center text-xs font-bold uppercase tracking-wide text-white sm:px-8">
-              Early-Bird Pricing Ends {course.pricing.earlyBirdDeadline}
+              Early-Bird Pricing Ends {formatDisplayDate(course.pricing.earlyBirdDeadline)}
             </div>
             <div className="p-6 sm:p-8">
               <p className="text-sm font-semibold text-white/60">{course.title}</p>
@@ -69,6 +74,7 @@ export default async function TestimonialsAndPricing({ course }: { course: Cours
           </RevealOnScroll>
         </Container>
       </Section>
+      )}
     </>
   );
 }

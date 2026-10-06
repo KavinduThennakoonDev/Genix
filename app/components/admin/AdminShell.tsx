@@ -7,6 +7,8 @@ import Image from "next/image";
 const NAV = [
   { href: "/admin", label: "Dashboard", icon: HomeIcon },
   { href: "/admin/courses", label: "Courses", icon: BookIcon },
+  { href: "/admin/categories", label: "Categories", icon: TagIcon },
+  { href: "/admin/mentors", label: "Mentors", icon: UsersIcon },
   { href: "/admin/webinars", label: "Webinars", icon: VideoIcon },
   { href: "/admin/testimonials", label: "Testimonials", icon: StarIcon },
   { href: "/admin/registrations", label: "Registrations", icon: UsersIcon },
@@ -85,6 +87,15 @@ function HomeIcon({ className }: { className?: string }) {
   return (
     <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.8} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+    </svg>
+  );
+}
+
+function TagIcon({ className }: { className?: string }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2} strokeLinecap="round" strokeLinejoin="round">
+      <path d="M20.59 13.41 13.42 20.58a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z" />
+      <line x1="7" y1="7" x2="7.01" y2="7" />
     </svg>
   );
 }
